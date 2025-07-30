@@ -31,8 +31,8 @@ class DatabaseSettings(DeploySettings):
         _password = self.POSTGRES_PASSWORD
         _port = self.POSTGRES_PORT
         _user = self.POSTGRES_USER
-        url = f"postgresql+asyncpg://{_user}:{_password}@{_host}:{_port}/{_db}"
+        url = PostgresDsn(f"postgresql+asyncpg://{_user}:{_password}@{_host}:{_port}/{_db}")
         return url
 
 
-db_settings = DatabaseSettings()
+db_settings = DatabaseSettings.model_validate({})
