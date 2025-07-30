@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 
 from app.configs.api import api_config
-from app.configs.base import AppStageEnum, STAGE
+from app.configs.base import STAGE, AppStageEnum
+
 
 def get_app() -> FastAPI:
     app = FastAPI(
