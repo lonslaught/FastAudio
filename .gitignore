@@ -12,6 +12,7 @@ data/
 !.black
 !.isort.cfg
 !.gitkeep
+!.python-version
 
 # Ignore Python optimizations (Byte-compiled / optimized / DLL files).
 __pycache__/
