@@ -22,10 +22,8 @@ def get_env_file_path(stage: AppStageEnum) -> Path:
 
 
 class DeploySettings(BaseSettings):
-    env_file = get_env_file_path(STAGE)
-
     model_config = SettingsConfigDict(
         case_sensitive=True,
-        env_file=(".env.template", env_file),
+        env_file=(".env.template", get_env_file_path(STAGE)),
         extra="ignore",
     )
