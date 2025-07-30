@@ -6,8 +6,6 @@ from app.services.users import UsersService
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
-from uuid import uuid4
-
 
 @router.post("/", response_model=UserOutput)
 @inject

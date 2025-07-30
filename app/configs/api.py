@@ -8,4 +8,5 @@ class ApiConfig(DeploySettings):
     TITLE: str = "FastAudio API Service"
 
 
+
 api_config = ApiConfig()

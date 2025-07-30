@@ -1,6 +1,7 @@
 from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
 
+from app.api.audios import router as audio_router
 from app.api.users import router as users_router
 from app.configs.api import api_config
 from app.configs.base import STAGE, AppStageEnum
@@ -18,6 +19,7 @@ def get_app() -> FastAPI:
     setup_dishka(app=app, container=container)
 
     app.include_router(users_router)
+    app.include_router(audio_router)
 
     return app
 

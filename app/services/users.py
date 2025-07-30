@@ -1,3 +1,8 @@
+from uuid import UUID
+
+from fastapi import HTTPException, status
+
+from app.models.users import User
 from app.repostiories.users import UsersRepo
 from app.schemas.users import UserInDb, UserInput, UserOutput
 
@@ -18,3 +23,16 @@ class UsersService:
             username=user_from_db.username,
         )
         return user_output
+    
+    async def get_user_by_id(self, user_id: UUID) -> User:
+        user = await self.users_repo.get_by_id(id=user_id)
+        if not user:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        
+        return user
+    
+    async def validate_user_token(self, user_id: UUID, user_token: UUID) -> None:
+        user = await self.get_user_by_id(user_id=user_id)
+        if user.token != user_token:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+
