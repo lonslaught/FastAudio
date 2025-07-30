@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-lint:  ## Run ruff linter
+lint:  ## Run ruff & mypy linter
 	uv run ruff check . --select I && uv run mypy app/ --explicit-package-bases
 pre-commit:  ## Run ruff formatter
 	uv run ruff check . --select I --fix
