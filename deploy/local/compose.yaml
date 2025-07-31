@@ -4,15 +4,18 @@ services:
     image: postgres:17.5-alpine
     restart: unless-stopped
     ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+      - ${POSTGRES_PORT}:5432
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_PORT=${POSTGRES_PORT}
     volumes:
       - ./data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   fastaudio_app_local:
     container_name: fastaudio_app_local
@@ -22,9 +25,15 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    environment:
+      - POSTGRES_PORT=5432
     ports:
       - "${API_PORT}:${API_PORT}"
+    depends_on:
+      fastaudio_database_local:
+        condition: service_healthy
     command: >-
       sh -c "
-      uv run uvicorn app.main:app --no-server-header --proxy-headers --workers=1 --host=${API_HOST} --port=${API_PORT} --lifespan on
+      uv run alembic upgrade head 
+      && uv run uvicorn app.main:app --no-server-header --proxy-headers --workers=1 --host=${API_HOST} --port=${API_PORT} --lifespan on
       "

@@ -13,6 +13,7 @@ data/
 !.isort.cfg
 !.gitkeep
 !.python-version
+!.stage.env
 
 # Ignore Python optimizations (Byte-compiled / optimized / DLL files).
 __pycache__/

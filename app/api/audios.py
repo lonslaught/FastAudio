@@ -13,6 +13,9 @@ router = APIRouter(prefix="/audios", tags=["Audios"])
 @router.post("/upload/")
 @inject
 async def upload_audio(request: Request, user_id: UUID, user_token: UUID, file: UploadFile, users_service: FromDishka[UsersService], audio_service: FromDishka[AudiosService]) -> str:
+    """
+    Эндпоинт для загрузки WAV-аудио пользователя
+    """
     await users_service.validate_user_token(user_id=user_id, user_token=user_token)
 
     audio_id = await audio_service.save_audiofile(user_id=user_id, file=file)
@@ -25,6 +28,7 @@ async def upload_audio(request: Request, user_id: UUID, user_token: UUID, file: 
 @router.get("/download/", name="download_audio")
 @inject
 async def download_audio(user_id: UUID, audio_id: UUID, audio_service: FromDishka[AudiosService]) -> StreamingResponse:
+    """Эндпоинт для выгрузки MP3-аудио пользователя"""
     audio_dto = await audio_service.get_audio(audio_id=audio_id, user_id=user_id)
 
     return StreamingResponse(
@@ -34,6 +38,4 @@ async def download_audio(user_id: UUID, audio_id: UUID, audio_service: FromDishk
             "Content-Disposition": f'attachment; filename="{audio_dto.filename}.mp3"'
         }
     )
-
-    
     
